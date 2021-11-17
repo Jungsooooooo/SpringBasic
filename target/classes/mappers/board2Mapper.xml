@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.edu.board2.mappers.boardMapper2">
+
+	<select id="boardCount" resultType="int">
+	SELECT	COUNT(*)
+	FROM	BOARD
+	</select>
+
+	<insert id="boardInsert" parameterType="com.edu.board2.domain.BoardDTO" useGeneratedKeys="true" keyProperty="bno">
+	INSERT	INTO	BOARD
+			(BNO, 		SUBJECT, 	CONTENT, 	WRITER, 	REG_DATE)
+	VALUES	(#{bno},	#{subject},	#{content},	#{writer},	now() )
+	</insert>
+
+	<!-- <insert id="fileInsert" parameterType="com.edu.board2.dto.FileDTO"> -->
+	<insert id="fileInsert" parameterType="com.edu.board2.domain.FileDTO" useGeneratedKeys="true" keyProperty="fno">
+	INSERT	INTO	FILES
+			(FNO,		BNO,	FILENAME,		FILEORINAME,	FILEURL)
+	VALUES	(#{fno},	#{bno},	#{fileName},	#{fileOriName},	#{fileUrl})
+	</insert>
+
+	<!-- 게시글 목록 보기 -->
+	<select id="boardList" resultType="boardDTO">
+	SELECT * FROM BOARD
+	</select>
+	
+	<!-- 전체 게시글 수 구하기 (Paging 처리) + 검색조건 -->
+	<select id="boardListTotalCount" parameterType="com.edu.board2.domain.SearchCriteria" resultType="Integer">
+    <![CDATA[
+        SELECT	count(*) FROM	BOARD
+        WHERE	1=1
+    ]]>
+		<include refid="search"/>
+	</select>
+
+	
+
+	<!-- 게시글 목록 보기 (Paging 처리) + 검색조건 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">AND SUBJECT LIKE CONCAT('%',#{keyword},'%')</if>
+			<if test="searchType == 'c'.toString()">AND CONTENT LIKE CONCAT('%',#{keyword},'%')</if>
+			<if test="searchType == 'w'.toString()">AND WRITER  LIKE CONCAT('%',#{keyword},'%')</if>
+		</if>
+	</sql>
+	
+	
+	
+	<select id="boardListPaging" parameterType="com.edu.board2.domain.SearchCriteria" resultType="boardDTO">
+    <![CDATA[
+        SELECT	*  FROM	BOARD 
+        WHERE	1=1
+    ]]>
+		<include refid="search"/>
+    <![CDATA[
+        ORDER BY bno DESC 
+        LIMIT	#{pageStart}, #{perPageNum}
+    ]]>
+	</select>
+	
+	<!-- 전체 게시글 수 구하기 (Paging 처리) -->
+	<select id="boardListTotalCount0" resultType="Integer">
+    <![CDATA[
+        SELECT	count(*)
+        FROM	BOARD
+    ]]>
+	</select>
+
+
+	<!-- 게시글 목록 보기 (Paging 처리) -->
+	<select id="boardListPaging0" parameterType="hashmap" resultType="boardDTO">
+    <![CDATA[
+        SELECT	*
+        FROM	BOARD
+        ORDER BY bno DESC
+        LIMIT	#{pageStart}, #{perPageNum}
+    ]]>
+	</select>
+
+	<!-- 게시글 번호에 해당하는 자료를 추출한다. -->
+	<select id="boardDetail" parameterType="int" resultType="com.edu.board2.domain.BoardDTO">
+	SELECT	*
+	FROM	BOARD
+	WHERE	BNO		= #{bno}
+	</select>
+	
+	<!-- bno에 해당하는 게시글의 정보를 수정한다. -->
+	<update id="boardUpdate" parameterType="com.edu.board2.domain.BoardDTO">
+	UPDATE	BOARD
+	SET		<if test="subject != null and subject !=''">SUBJECT = #{subject}</if>
+			<if test="subject != null and subject !='' and content != null and content !=''"> , </if>
+			<if test="content != null and content !=''">CONTENT = #{content}</if>
+	WHERE	BNO		= #{bno}
+	</update>
+	
+	<!-- bno에 해당하는 자료를 삭제한다. -->
+	<delete id="boardDelete" parameterType="int">
+	DELETE
+	FROM	BOARD
+	WHERE	BNO		= #{bno}
+	</delete>
+	
+	<select id="fileDetail" parameterType="int" resultType="com.edu.board2.domain.FileDTO">
+	SELECT	*
+	FROM	FILES
+	WHERE	BNO		= #{bno}
+	</select>
+</mapper>
+
+

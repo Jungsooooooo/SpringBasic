@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.edu.board.mappers.boardMapper">
+
+	<!-- 게시글 작성 -->
+	<insert id="insert" parameterType="com.edu.board.domain.BoardVO">
+	INSERT 	INTO sboard (title, 	content, 	writer)
+				VALUES(#{title}, 	#{content}, #{writer})
+	</insert>
+
+	<!-- 게시글 목록 -->
+	<select id="list" parameterType="String" resultType="com.edu.board.domain.BoardVO">
+	SELECT 	bno, title, content, writer, regDate, viewCnt
+	FROM	sboard
+	</select>
+	
+	<select id="list222" parameterType="String" resultType="com.edu.board.domain.BoardVO">
+	SELECT 	bno, title, content, writer, regDate, viewCnt
+		<if test="value != null">
+		FROM	#{value}
+		</if> 
+	</select>
+	
+	<!-- 게시글 상세 정보 -->
+	<select id="view" parameterType="int" resultType="com.edu.board.domain.BoardVO">
+	SELECT 	bno, title, content, writer, regDate, viewCnt
+	FROM	sboard
+	WHERE	bno = #{bno}	
+	</select>
+	
+	<!-- 게시글 정보 수정 -->
+	<update id="update" parameterType="com.edu.board.domain.BoardVO">
+	UPDATE	sboard
+	SET		writer	= #{writer},
+			title	= #{title},
+			content	= #{content}
+	WHERE	bno		= #{bno}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="delete" parameterType="int">
+	DELETE	FROM	sboard
+	WHERE	bno		= #{bno}
+	</delete>
+	
+</mapper>
+
+

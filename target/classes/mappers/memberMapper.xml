@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.edu.member.mapper.memberMapper">
+
+		<select id="selectMember" resultType="com.edu.member.dto.MemberDTO">
+			SELECT * FROM member
+		</select>
+	
+		<select id="view" parameterType="String" resultType="com.edu.member.dto.MemberDTO">
+			SELECT * FROM member WHERE id = #{id}
+		</select>
+		
+		<!-- 해당하는 회원id의 비밀번호, 이름, 번화번호, 주소를 변경한다.  -->
+		<update id="update" parameterType="com.edu.member.dto.MemberDTO">
+			UPDATE	member
+			SET		passwd 	= #{passwd},
+					name	= #{name},
+					tel		= #{tel},
+					address	= #{address}
+			WHERE	id		= #{id}
+		</update>
+		
+		<!-- 회원 아이디에 해당하는 정보를 삭제한다. -->
+		<delete id="delete" parameterType="String">
+			DELETE	FROM	member
+			WHERE	id	= #{id}
+		</delete>
+	
+		<!-- 회원 아이디 중복 검사 -->
+		<select id="idCheck" resultType="int">
+			SELECT	count(*)
+			FROM	member
+			WHERE	id = #{id}
+		</select>
+		
+		<!-- 회원 가입 -->
+		<insert id="insert" parameterType="com.edu.member.dto.MemberDTO">
+			INSERT INTO member
+					(id, passwd, name, reg_date, tel, address)
+			VALUES	(#{id}, #{passwd}, #{name}, NOW(), #{tel}, #{address})
+		</insert>
+		
+		<!-- 로그인 -->
+		<select id="login" parameterType="com.edu.member.dto.MemberDTO" resultType="com.edu.member.dto.MemberDTO">
+			SELECT	id, passwd, name
+			FROM	member
+			WHERE	id		= #{id}
+			  AND	passwd	= #{passwd}
+		</select>
+		
+		<!-- 회원가입 (Ajax) -->
+		<insert id="register" parameterType="com.edu.member.dto.MemberDTO">
+			INSERT 	INTO member
+					(id,	passwd,		name,		reg_date,	tel,	address)
+			VALUES	(#{id},	#{passwd},	#{name},	NOW(),		#{tel},	#{address})
+		</insert>
+
+</mapper>
+	
+	

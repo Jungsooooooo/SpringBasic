@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!-- 자동주입(@Autowired)을 사용하기 위해서 기술한다. -->
+	<context:annotation-config/>
+	
+	<bean id="kTire"	class="com.edu.basic.car.mycar06.KoreaTire"/>
+	<bean id="aTire"	class="com.edu.basic.car.mycar06.AmericaTire"/>
+	<bean id="car"		class="com.edu.basic.car.mycar06.Car"/>
+	
+</beans>

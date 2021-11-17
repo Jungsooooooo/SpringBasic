@@ -1,0 +1,57 @@
+
+-- board
+
+create table booktype
+(
+  id varchar(3) character set utf8 not null,
+  name varchar(50) character set utf8 not null,
+  PRIMARY KEY(id)
+) ENGINE=MYISAM CHARSET=utf8;
+
+create table sboard (
+bno      int         not null  auto_increment,
+title      varchar(50)   not null,
+content   text         not null,
+writer   varchar(30)   not null,
+regDate   timestamp   default now(),
+viewCnt   int         default 0,
+primary key(bno)
+) default  charset=utf8 collate utf8_general_ci;
+
+
+create table BOARD (
+	bno			INT NOT NULL AUTO_INCREMENT, -- 게시글 일련번호
+	subject		VARCHAR(100),	-- 게시글 제목
+	content		TEXT,			-- 게시글 내용
+	writer		VARCHAR(40),	-- 게시글 작성자
+	reg_date	DATETIME,		-- 게시글 작성일시
+	PRIMARY KEY(bno)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+create table COMMENT (
+	cno			INT NOT NULL AUTO_INCREMENT,		-- 댓글 일련번호
+	bno			INT NOT NULL,	-- 댓글이 달릴 게시글의 일련번호
+	content		TEXT,				-- 댓글의 내용
+	writer		VARCHAR(40),		-- 댓글 작성자
+	reg_date	DATETIME,			-- 댓글 작성 일시
+	PRIMARY KEY(cno),
+	FOREIGN KEY(bno) REFERENCES BOARD(bno)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+create table FILES (
+	fno			INT NOT NULL,	-- 파일 일련번호
+	bno			INT NOT NULL,	-- 게시글 번호
+	fileName	VARCHAR(80),	-- 저장될 파일명
+	fileOriName VARCHAR(80), 	-- 원래 파일명
+	fileUrl		VARCHAR(80),	-- 파일의 위치
+	FOREIGN KEY(bno) REFERENCES BOARD(bno)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+CREATE TABLE `reservation_seat` (
+  `movieID` int NOT NULL,
+  `userID` varchar(30) DEFAULT NULL,
+  `seatID` int NOT NULL,
+  PRIMARY KEY (`movieID`,`seatID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+
